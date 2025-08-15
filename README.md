@@ -10,17 +10,20 @@ Netball/
 ├── requirements.txt           # Python dependencies
 ├── README.md                 # This file
 ├── example_database_usage.py # Example of DatabaseManager usage
+├── example_schema_usage.py   # Example of DatabaseSchema usage
 ├── ui/                       # UI components and layouts
 │   └── __init__.py
 ├── models/                   # Database models and schema
 │   ├── __init__.py
-│   └── database_manager.py   # SQLite database manager
+│   ├── database_manager.py   # SQLite database manager
+│   └── schema.py            # Database schema and table definitions
 ├── controllers/              # Application logic and business rules
 │   └── __init__.py
 └── tests/                    # Test files
     ├── __init__.py
     ├── test_main.py          # Tests for main application
-    └── test_database_manager.py # Tests for DatabaseManager
+    ├── test_database_manager.py # Tests for DatabaseManager
+    └── test_schema.py        # Tests for database schema
 ```
 
 ## Setup
@@ -44,8 +47,9 @@ pytest tests/
 
 ## Database Usage
 
-The application includes a `DatabaseManager` class for SQLite operations:
+The application includes a `DatabaseManager` class for SQLite operations and a `DatabaseSchema` class for table management:
 
+### DatabaseManager
 ```python
 from models.database_manager import DatabaseManager
 
@@ -66,7 +70,27 @@ with DatabaseManager("netball_stats.db") as db:
     pass
 ```
 
-See `example_database_usage.py` for a complete example.
+### DatabaseSchema
+```python
+from models.database_manager import DatabaseManager
+from models.schema import DatabaseSchema
+
+# Create schema manager
+db = DatabaseManager("netball_stats.db")
+schema = DatabaseSchema(db)
+
+# Create all tables with foreign key relationships
+schema.create_tables()
+
+# Insert sample data
+schema.insert_sample_data()
+
+# Check table existence
+if schema.table_exists('players'):
+    print("Players table exists")
+```
+
+See `example_database_usage.py` and `example_schema_usage.py` for complete examples.
 
 ## Features
 
@@ -75,8 +99,10 @@ See `example_database_usage.py` for a complete example.
 - Modular architecture with separate UI, models, and controllers
 - Comprehensive test suite
 - Database operations: INSERT, UPDATE, DELETE, SELECT
-- Foreign key constraint support
+- Foreign key constraint support with cascade delete
 - Context manager support for safe database operations
+- Complete database schema for netball tournament statistics
+- Sample data insertion for testing and demonstration
 
 ## Development
 
