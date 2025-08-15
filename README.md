@@ -11,8 +11,10 @@ Netball/
 ├── README.md                 # This file
 ├── example_database_usage.py # Example of DatabaseManager usage
 ├── example_schema_usage.py   # Example of DatabaseSchema usage
+├── example_team_player_ui.py # Example of team/player management UI
 ├── ui/                       # UI components and layouts
-│   └── __init__.py
+│   ├── __init__.py
+│   └── team_player_management.py # Team and player management UI
 ├── models/                   # Database models and schema
 │   ├── __init__.py
 │   ├── database_manager.py   # SQLite database manager
@@ -23,7 +25,8 @@ Netball/
     ├── __init__.py
     ├── test_main.py          # Tests for main application
     ├── test_database_manager.py # Tests for DatabaseManager
-    └── test_schema.py        # Tests for database schema
+    ├── test_schema.py        # Tests for database schema
+    └── test_team_player_management.py # Tests for team/player management UI
 ```
 
 ## Setup
@@ -92,6 +95,35 @@ if schema.table_exists('players'):
 
 See `example_database_usage.py` and `example_schema_usage.py` for complete examples.
 
+### Team and Player Management UI
+
+The application includes a comprehensive UI for managing teams and players:
+
+```python
+from models.database_manager import DatabaseManager
+from models.schema import DatabaseSchema
+from ui.team_player_management import TeamPlayerManagementWidget
+
+# Create database and schema
+db = DatabaseManager("netball_stats.db")
+schema = DatabaseSchema(db)
+schema.create_tables()
+schema.insert_sample_data()
+
+# Create the management widget
+management_widget = TeamPlayerManagementWidget(db)
+management_widget.show()
+```
+
+Features:
+- **Teams Management**: Add, edit, and delete teams with division selection
+- **Players Management**: Add, edit, and delete players with position and team assignment
+- **Data Validation**: Form validation for required fields
+- **Cascade Delete**: Deleting a team automatically deletes its players
+- **Real-time Updates**: Tables refresh automatically after operations
+
+See `example_team_player_ui.py` for a complete example.
+
 ## Features
 
 - PySide6-based desktop application
@@ -103,6 +135,8 @@ See `example_database_usage.py` and `example_schema_usage.py` for complete examp
 - Context manager support for safe database operations
 - Complete database schema for netball tournament statistics
 - Sample data insertion for testing and demonstration
+- Team and player management UI with add/edit/delete functionality
+- QTableView with custom table models for data display
 
 ## Development
 
